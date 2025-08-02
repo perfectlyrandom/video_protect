@@ -12,7 +12,7 @@ A FastAPI backend with a NiceGUI frontend for processing and protecting videos.
 
 ## Prerequisites
 
-- Python 3.8+
+- Python 3.9+
 - Poetry (for dependency management)
 - FFmpeg (for video processing)
 
@@ -29,7 +29,49 @@ A FastAPI backend with a NiceGUI frontend for processing and protecting videos.
    poetry install
    ```
 
-3. Install FFmpeg:
+### Virtual Environment
+
+This project uses Poetry for dependency management. The virtual environment is created in the project directory (`.venv`) for better IDE integration and Jupyter support.
+
+1. Configure Poetry to create the virtual environment in the project directory:
+   ```bash
+   poetry config virtualenvs.in-project true
+   ```
+
+2. Remove any existing virtual environment and reinstall dependencies:
+   ```bash
+   poetry env remove python  # Remove existing environment if any
+   poetry install  # Recreate the environment and install dependencies
+   ```
+
+#### For Jupyter Notebook/Lab:
+
+1. Activate the virtual environment:
+   ```bash
+   source .venv/bin/activate  # On macOS/Linux
+   .\.venv\Scripts\activate  # On Windows
+   ```
+
+2. Install ipykernel if not already installed:
+   ```bash
+   poetry add ipykernel
+   ```
+
+3. Register the kernel with Jupyter:
+   ```bash
+   python -m ipykernel install --user --name=video-protect --display-name="Python (video-protect)"
+   ```
+
+4. Now you can select the "Python (video-protect)" kernel in Jupyter.
+
+#### Verifying the Kernel:
+```bash
+jupyter kernelspec list
+```
+
+### FFmpeg Installation
+
+For video processing, you'll need FFmpeg:
    - On macOS: `brew install ffmpeg`
    - On Ubuntu/Debian: `sudo apt-get install ffmpeg`
    - On Windows: Download from [FFmpeg's website](https://ffmpeg.org/download.html)
