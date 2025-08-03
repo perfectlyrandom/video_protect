@@ -72,23 +72,31 @@ class VideoProcessorUI:
         self.status = ui.label().classes('text-center text-grey-8 mt-4')
         
     async def handle_upload(self, event):
-        """Handle file upload"""
+        print('DEBUG: handle_upload called')
         try:
             self.file_path = os.path.join(UPLOAD_FOLDER, event.name)
             self.file_name = event.name
             self.duration = None
             self.processed_url = None
             self.file_id = None
-            self.status_label.text = 'File uploaded. Ready to process.'
-            
-            # Save the file
-            with open(self.file_path, 'wb') as f:
-                f.write(event.content)
-            
-            # Enable process button
+
+            content = event.content
+            if isinstance(content, bytes):
+                with open(self.file_path, 'wb') as f:
+                    f.write(content)
+            elif hasattr(content, 'read'):
+                with open(self.file_path, 'wb') as f:
+                    f.write(content.read())
+            else:
+                raise ValueError("Unsupported file content type")
+            print('DEBUG: File saved to', self.file_path)
+
             self.process_btn.props(remove='disable')
-            
+            print('DEBUG: Process button enabled')
+            self.status_label.text = f'File uploaded: {self.file_name}. Ready to process.'
+            self.status_label.classes(remove='text-negative')
         except Exception as e:
+            print(f'DEBUG: Exception in handle_upload: {e}')
             self.status_label.text = f'Error: {str(e)}'
             self.status_label.classes('text-negative')
     
